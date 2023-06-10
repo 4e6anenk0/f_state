@@ -26,13 +26,13 @@ T2 identity<T1, T2>(T1 x) => x as T2;
 
 /* T extractor<T>(MetaState<T> stateValue) => stateValue.extract(); */
 
-class Pipeline<T1, T2> {
-  MetaState<T2> Function(T1) _storedFunc;
+/* class Pipeline<T1, T2, T3> {
+  MetaState<T3> Function(T1) _storedFunc;
 
   Pipeline({MetaState<T2> Function(T1)? func}) : _storedFunc = func ?? identity;
 
-  Pipeline bind(MetaState<T2> Function(T1) f) {
-    MetaState<T2> Function(T1) bindOutputFunc =
+  Pipeline bind(MetaState<T3> Function(T2) f) {
+    MetaState<T3> Function(T1) bindOutputFunc =
         MetaState.bind(wrapedFunc: _storedFunc, wraperFunc: f);
     _storedFunc = bindOutputFunc;
     return this;
@@ -41,18 +41,18 @@ class Pipeline<T1, T2> {
   MetaState<T2> produce(state) {
     return _storedFunc(state);
   }
-}
+} */
 
 abstract class MetaState<T> {
-  static T extractor<T>(MetaState<T> x) => x.extract();
+  T extractor(MetaState<T> x) => x.extract();
 
   T extract();
 
-  static MetaState<T2> Function(T1) bind<T1, T2>(
+/*   static MetaState<T2> Function(T1) bind<T1, T2>(
       {required MetaState<T2> Function(T1) wraperFunc,
       required MetaState<T2> Function(T1) wrapedFunc}) {
     return (T1 x) => wraperFunc(extractor(wrapedFunc(x) as MetaState<T1>));
-  }
+  } */
 }
 
 class FState<T> extends MetaState<T> {
@@ -71,18 +71,17 @@ class FState<T> extends MetaState<T> {
 
 class Value<T> extends MetaState<T> {
   late final T _value;
-  //Function func = (x) => Value(x);
+  Function func = (x) => Value(x);
 
   Value(this._value);
 
-  //Value.withFunction(this._value, this.func);
+  Value.withFunction(this._value, this.func);
 
   Value run(Function f) => f(_value);
 
-  /* Value bind(Function f) {
-    extractor(Value a) => a.extract();
+  Value bind(Function f) {
     return Value.withFunction(_value, (x) => f(extractor(func(x))));
-  } */
+  }
 
   @override
   T extract() => _value;

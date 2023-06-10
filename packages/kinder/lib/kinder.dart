@@ -1,9 +1,8 @@
 /// Support for doing something awesome.
 ///
 /// More dartdocs go here.
-library f_state;
+library;
 
-export 'src/pipeline.dart';
-
+export 'src/kinder_base.dart';
 
 // TODO: Export any libraries intended for clients of this package.
